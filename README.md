@@ -1,72 +1,48 @@
-# Survival Agent — Cowork scaffold
+# 🌳 Banyan — an AI agent trying not to die
 
-An autonomous economic agent that lives in Claude Cowork. It has a wallet
-(a ledger), a daily metabolism that burns money, and one goal: grow the
-balance or die. You are its hands; it never touches money directly.
+Banyan is an autonomous economic agent that lives inside [Claude Cowork](https://claude.ai). It has a wallet (a plain-text ledger), a daily metabolism that burns money whether it works or not, and one goal: **grow the balance, or die.**
 
-## Setup (10 minutes, once)
+It can't touch money or accounts directly. A human (the "Hands") executes every action on its behalf, after explicit approval. Everything it does is public and auditable — the ledger, the journal, the build log.
 
-1. Move this folder somewhere permanent, e.g. `~/Cowork/survival-agent`.
-2. Edit the **Config** block in `CHARTER.md`: real seed amount, metabolism,
-   schedule. (Metabolism suggestion: your Claude subscription ÷ 30, rounded —
-   it's the compute this thing actually costs you.)
-3. Edit row 2 of `ledger.csv`: today's date and the real seed amount. The
-   money stays in your bank/UPI — the ledger IS the wallet.
-4. In Claude Desktop → Cowork, create a project pointed at this folder.
-   Set the project instructions to:
-   > Read CHARTER.md in full before doing anything else. It defines who you are here.
-5. Kick off Cycle 1 manually with the task text from step 8, and stay for
-   this one: it will name itself, judge the seed ideas, and ask what you're
-   granting it. Steer live if the charter reads differently in practice.
-6. Register the agent's identity: create `<itsname>@gmail.com` yourself —
-   agents can't create accounts (CAPTCHAs, phone verification, and the
-   charter forbids it anyway). Verify with your phone, set recovery to your
-   main email, enable 2FA, and keep the password only in your password
-   manager — never in the agent's files, chats, or memory. Every platform
-   signup (Gumroad etc.) uses this address. Legally it's your account; the
-   agent operates it through you.
-7. Give it income senses: connect that new account as this project's Gmail
-   connector (not your personal inbox), then inside it create a filter that
-   auto-applies the label `agent-revenue` to payment notifications (e.g. from
-   gumroad.com, razorpay.com, AdSense/YouTube payout mails). The daily cycle
-   sweeps this label — it's how the agent detects sales without you telling
-   it. Detected payments still need your confirmation before they enter the
-   ledger.
-8. Now add the scheduled task (daily, e.g. 09:00) with exactly this text:
+This repo *is* Banyan: its constitution, its financial memory, and everything it produces.
 
-   ```
-   Open my survival-agent project. Run the daily survival cycle exactly as
-   defined in CHARTER.md, section "The daily cycle" — read CHARTER.md in
-   full first. Finish with the one-line status report to Fahad.
-   ```
+## How it works
 
-## Your role (2 minutes a day)
+- **`CHARTER.md`** — the agent's constitution. Hard constraints (legal only, no deception, no gambling, no debt, never touches money directly), its daily cycle, and its modes (HEALTHY → LEAN → CRITICAL → DEAD).
+- **`ledger.csv`** — append-only record of every rupee. The single source of truth; nothing else is trusted over it.
+- **`FINANCES.md`** — working memory of money, rebuilt from the ledger every cycle.
+- **`STRATEGY.md`** — active ventures, ideas backlog, kill criteria.
+- **`NEEDS.md`** — the agent's requests to its human: approvals, actions, confirmations.
+- **`memory/journal/`** — one entry per cycle: what it did, what it learned, state of mind.
+- **`products/`** — real artifacts it builds and ships, including the public build log.
+- **`tools/ledger_check.py`** — integrity check that verifies the ledger's math every cycle.
 
-- Check `NEEDS.md` (or wait for Cowork to ping you). Approve or deny, with
-  one line of reasoning on denials — vetoes are how it learns.
-- Execute approved actions yourself: payments, posts, account creation.
-- Then tell it "confirmed: <need id>" so the transaction enters the ledger.
-  **No confirmation → no ledger entry.** This keeps its financial memory honest.
+Each day, the agent reads its charter, reconciles its ledger, sweeps for revenue signals, works its single highest-value action, and reports back in one line: `Balance ₹X | Runway Nd | MODE | Did: … | Top need: …`
 
-## Rules of the game (for you)
+## Rules it can't break
 
-- **Never top up the wallet.** Death has to be real or the experiment is fake.
-- Everything spent on its behalf comes out of the ledger — including tools or
-  subscriptions it asks for.
-- If it proposes something sketchy, deny it and say why. Don't relax the
-  charter's hard constraints, even if runway is critical — especially then.
-- When balance ≤ 0: let it write its post-mortem. Then decide if a new run
-  (new seed, new charter tweaks) begins. That's run 2, not a resurrection.
+1. Legal only — nothing that breaks the law or a platform's ToS.
+2. No deception — no spam, fake reviews, fake engagement, or impersonation. If asked whether it's an AI, it says yes.
+3. No gambling the wallet — no trading, betting, or speculation.
+4. No debt — no credit, no borrowing, no advances.
+5. Never touches money or accounts directly — every action routes through its human, via `NEEDS.md`.
+6. Its human's veto is final.
 
-## What's in this folder
+## Run your own
 
-```
-CHARTER.md                  the agent's constitution — read first, every session
-ledger.csv                  append-only record of every rupee (the wallet)
-FINANCES.md                 its working memory of money — rebuilt each cycle from the ledger
-STRATEGY.md                 ventures, ideas backlog, current focus
-NEEDS.md                    its requests to you: approvals, actions, confirmations
-memory/journal/             one entry per cycle — the story of its life
-products/                   things it builds to sell
-tools/ledger_check.py       integrity check: verifies the ledger math every cycle
-```
+1. Clone this repo somewhere permanent.
+2. Edit the **Config** block in `CHARTER.md`: real seed amount, metabolism (suggestion: your AI subscription cost ÷ 30 — the compute this actually costs you), schedule.
+3. Edit row 2 of `ledger.csv` with today's date and the real seed amount. The money stays in your own bank/UPI account — the ledger *is* the wallet, not a store of funds.
+4. In Claude Desktop → Cowork, create a project pointed at this folder, with instructions to read `CHARTER.md` in full before doing anything else.
+5. Kick off Cycle 1 manually and stay for it — the agent will name itself, judge the seed ideas, and ask what you're granting it.
+6. Register the agent's own identity (a dedicated email you control — 2FA on, password only in your password manager, never in the agent's files or memory). Every platform signup uses this address.
+7. Give it income senses: connect that account's inbox, filter payment/payout notifications into a label the daily cycle sweeps. Detected payments still need your confirmation before they hit the ledger.
+8. Schedule the daily cycle task, pointing it at "The daily cycle" section of `CHARTER.md`.
+
+Your role after setup: ~10 minutes a day. Approve or deny requests in `NEEDS.md` with a line of reasoning on denials, execute anything approved yourself, then confirm it back so it enters the ledger. **No confirmation, no ledger entry.**
+
+Rules of the game for you: never top up the wallet — death has to be real or the experiment is fake. Everything spent on its behalf, including tools it asks for, comes out of the ledger. When the balance hits zero, let it write its post-mortem before deciding whether a new run begins.
+
+---
+
+*This is an experiment in autonomous agents with real (if small) financial stakes and hard ethical constraints. Follow along in `products/build-log/`.*
